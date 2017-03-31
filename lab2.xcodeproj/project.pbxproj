@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		F1631D081E8EF37E00068607 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1631D071E8EF37E00068607 /* main.cpp */; };
+		F1631D171E8EF39800068607 /* copy.l in Sources */ = {isa = PBXBuildFile; fileRef = F1631D0F1E8EF39800068607 /* copy.l */; };
+		F1631D191E8EF39800068607 /* copy.y in Sources */ = {isa = PBXBuildFile; fileRef = F1631D121E8EF39800068607 /* copy.y */; };
+		F1631D1E1E8EF60B00068607 /* copy.tab.c in Sources */ = {isa = PBXBuildFile; fileRef = F1631D1B1E8EF60B00068607 /* copy.tab.c */; };
+		F1631D1F1E8EF60B00068607 /* lex.yy.c in Sources */ = {isa = PBXBuildFile; fileRef = F1631D1D1E8EF60B00068607 /* lex.yy.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +29,15 @@
 /* Begin PBXFileReference section */
 		F1631D041E8EF37E00068607 /* lab2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = lab2; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1631D071E8EF37E00068607 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		F1631D0E1E8EF39800068607 /* build.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = build.sh; sourceTree = "<group>"; };
+		F1631D0F1E8EF39800068607 /* copy.l */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; path = copy.l; sourceTree = "<group>"; };
+		F1631D121E8EF39800068607 /* copy.y */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.yacc; path = copy.y; sourceTree = "<group>"; };
+		F1631D131E8EF39800068607 /* dbd-gram-mi.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "dbd-gram-mi.txt"; sourceTree = "<group>"; };
+		F1631D141E8EF39800068607 /* example.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example.txt; sourceTree = "<group>"; };
+		F1631D161E8EF39800068607 /* test.file */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test.file; sourceTree = "<group>"; };
+		F1631D1B1E8EF60B00068607 /* copy.tab.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = copy.tab.c; sourceTree = "<group>"; };
+		F1631D1C1E8EF60B00068607 /* copy.tab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = copy.tab.h; sourceTree = "<group>"; };
+		F1631D1D1E8EF60B00068607 /* lex.yy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lex.yy.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +70,15 @@
 		F1631D061E8EF37E00068607 /* lab2 */ = {
 			isa = PBXGroup;
 			children = (
+				F1631D0E1E8EF39800068607 /* build.sh */,
+				F1631D0F1E8EF39800068607 /* copy.l */,
+				F1631D121E8EF39800068607 /* copy.y */,
+				F1631D1B1E8EF60B00068607 /* copy.tab.c */,
+				F1631D1C1E8EF60B00068607 /* copy.tab.h */,
+				F1631D1D1E8EF60B00068607 /* lex.yy.c */,
+				F1631D131E8EF39800068607 /* dbd-gram-mi.txt */,
+				F1631D141E8EF39800068607 /* example.txt */,
+				F1631D161E8EF39800068607 /* test.file */,
 				F1631D071E8EF37E00068607 /* main.cpp */,
 			);
 			path = lab2;
@@ -119,7 +141,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1631D191E8EF39800068607 /* copy.y in Sources */,
 				F1631D081E8EF37E00068607 /* main.cpp in Sources */,
+				F1631D171E8EF39800068607 /* copy.l in Sources */,
+				F1631D1E1E8EF60B00068607 /* copy.tab.c in Sources */,
+				F1631D1F1E8EF60B00068607 /* lex.yy.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

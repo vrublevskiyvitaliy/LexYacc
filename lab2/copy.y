@@ -198,8 +198,9 @@ OPS:    SEGM LIST_OP                     { $$ = new pr($2); }
 ;
 
 
-LIST_OP: OP
-| LIST_OP','OP
+LIST_OP:
+LIST_OP','OP { $$ = new pr($1, $3); }
+| OP { $$ = new pr($1); }
 ;
 
 OP:
