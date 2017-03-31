@@ -208,6 +208,7 @@ NAME'='TERM OP2			{ $$ = new ParserExpression("NAME", $3, $4, true); }
 |	SSPTR'='TERM OP2		{ $$ = new ParserExpression("SSPTR", $3, $4, true); }
 |	COMPRTN'='TERM OP2		{ $$ = new ParserExpression("COMPRTN", $3, $4, true); }
 |	RMNAME'='TERM OP2		{ $$ = new ParserExpression("RMNAME", $3, $4, true); }
+|	NUM                     { $$ = new value($1); }
 ;
 
 OP2:
