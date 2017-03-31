@@ -184,7 +184,7 @@ int global_id = 1;
 %token NUM ID
 
 %type<str> NUM ID SEGM
-%type<oper> OPS OP1 OP2 TERM ARG
+%type<oper> OPS /*  OP1 OP2  */ TERM ARG LIST_OP OP
 %type<expr> NAME PARENT BYTES POINTER FREQ RULES EXIT DSGROUP SSPTR COMPRTN SOURCE RMNAME
 %type<args> ARGS
 
@@ -193,38 +193,59 @@ int global_id = 1;
 PROGRAM: OPS                            { /*$1->save_to_file(); delete $1;*/ tree = $1; }
 ;
 
-OPS:    SEGM OP1                     { $$ = new pr($2); }
-|       TERM SEGM OP1                { $$ = new pr($1, $3); }
+OPS:    SEGM LIST_OP                     { $$ = new pr($2); }
+|       TERM SEGM LIST_OP                { $$ = new pr($1, $3); }
 ;
 
-OP1:
-NAME'='TERM OP2			{ $$ = new ParserExpression("NAME", $3, $4, true); }
-|	PARENT'='TERM OP2		{ $$ = new ParserExpression("PARENT", $3, $4, true); }
-|	BYTES'='TERM OP2		{ $$ = new ParserExpression("BYTES", $3, $4, true); }
-|	POINTER'='TERM OP2		{ $$ = new ParserExpression("POINTER", $3, $4, true); }
-|	FREQ'='TERM OP2		        { $$ = new ParserExpression("FREQ", $3, $4, true); }
-|	EXIT'='TERM OP2			{ $$ = new ParserExpression("EXIT", $3, $4, true); }
-|	DSGROUP'='TERM OP2		{ $$ = new ParserExpression("DSGROUP", $3, $4, true); }
-|	SSPTR'='TERM OP2		{ $$ = new ParserExpression("SSPTR", $3, $4, true); }
-|	COMPRTN'='TERM OP2		{ $$ = new ParserExpression("COMPRTN", $3, $4, true); }
-|	RMNAME'='TERM OP2		{ $$ = new ParserExpression("RMNAME", $3, $4, true); }
-|	NUM                     { $$ = new value($1); }
+
+LIST_OP: OP
+| LIST_OP','OP
 ;
 
-OP2:
-','NAME'='TERM OP2		{ $$ = new ParserExpression("NAME", $4, $5, true); }
-|	','PARENT'='TERM OP2		{ $$ = new ParserExpression("PARENT", $4, $5, true); }
-|	','BYTES'='TERM OP2		{ $$ = new ParserExpression("BYTES", $4, $5, true); }
-|	','POINTER'='TERM OP2		{ $$ = new ParserExpression("POINTER", $4, $5, true); }
-|	','FREQ'='TERM OP2		{ $$ = new ParserExpression("FREQ", $4, $5, true); }
-|	','EXIT'='TERM OP2		{ $$ = new ParserExpression("EXIT", $4, $5, true); }
-|	','DSGROUP'='TERM OP2		{ $$ = new ParserExpression("DSGROUP", $4, $5, true); }
-|	','SSPTR'='TERM OP2		{ $$ = new ParserExpression("SSPTR", $4, $5, true); }
-|	','COMPRTN'='TERM OP2		{ $$ = new ParserExpression("COMPRTN", $4, $5, true); }
-|	','RMNAME'='TERM OP2		{ $$ = new ParserExpression("RMNAME", $4, $5, true); }
-|	',' '*' TERM OP1		{ $$ = $4; }
-|	NUM                     { $$ = new value($1); }
+OP:
+NAME'='TERM			{ $$ = new ParserExpression("NAME", $3, NULL, true); }
+|	PARENT'='TERM		{ $$ = new ParserExpression("PARENT", $3, NULL, true); }
+|	BYTES'='TERM		{ $$ = new ParserExpression("BYTES", $3, NULL, true); }
+|	POINTER'='TERM		{ $$ = new ParserExpression("POINTER", $3, NULL, true); }
+|	FREQ'='TERM		        { $$ = new ParserExpression("FREQ", $3, NULL, true); }
+|	EXIT'='TERM			{ $$ = new ParserExpression("EXIT", $3, NULL, true); }
+|	DSGROUP'='TERM		{ $$ = new ParserExpression("DSGROUP", $3, NULL, true); }
+|	SSPTR'='TERM		{ $$ = new ParserExpression("SSPTR", $3, NULL, true); }
+|	COMPRTN'='TERM		{ $$ = new ParserExpression("COMPRTN", $3, NULL, true); }
+|	RMNAME'='TERM		{ $$ = new ParserExpression("RMNAME", $3, NULL, true); }
+// for testing
+//|	NUM                     { $$ = new value($1); }
 ;
+//
+//OP1:
+//NAME'='TERM OP2			{ $$ = new ParserExpression("NAME", $3, $4, true); }
+//|	PARENT'='TERM OP2		{ $$ = new ParserExpression("PARENT", $3, $4, true); }
+//|	BYTES'='TERM OP2		{ $$ = new ParserExpression("BYTES", $3, $4, true); }
+//|	POINTER'='TERM OP2		{ $$ = new ParserExpression("POINTER", $3, $4, true); }
+//|	FREQ'='TERM OP2		        { $$ = new ParserExpression("FREQ", $3, $4, true); }
+//|	EXIT'='TERM OP2			{ $$ = new ParserExpression("EXIT", $3, $4, true); }
+//|	DSGROUP'='TERM OP2		{ $$ = new ParserExpression("DSGROUP", $3, $4, true); }
+//|	SSPTR'='TERM OP2		{ $$ = new ParserExpression("SSPTR", $3, $4, true); }
+//|	COMPRTN'='TERM OP2		{ $$ = new ParserExpression("COMPRTN", $3, $4, true); }
+//|	RMNAME'='TERM OP2		{ $$ = new ParserExpression("RMNAME", $3, $4, true); }
+//// for testing
+//|	NUM                     { $$ = new value($1); }
+//;
+//
+//OP2:
+//','NAME'='TERM OP2		{ $$ = new ParserExpression("NAME", $4, $5, true); }
+//|	','PARENT'='TERM OP2		{ $$ = new ParserExpression("PARENT", $4, $5, true); }
+//|	','BYTES'='TERM OP2		{ $$ = new ParserExpression("BYTES", $4, $5, true); }
+//|	','POINTER'='TERM OP2		{ $$ = new ParserExpression("POINTER", $4, $5, true); }
+//|	','FREQ'='TERM OP2		{ $$ = new ParserExpression("FREQ", $4, $5, true); }
+//|	','EXIT'='TERM OP2		{ $$ = new ParserExpression("EXIT", $4, $5, true); }
+//|	','DSGROUP'='TERM OP2		{ $$ = new ParserExpression("DSGROUP", $4, $5, true); }
+//|	','SSPTR'='TERM OP2		{ $$ = new ParserExpression("SSPTR", $4, $5, true); }
+//|	','COMPRTN'='TERM OP2		{ $$ = new ParserExpression("COMPRTN", $4, $5, true); }
+//|	','RMNAME'='TERM OP2		{ $$ = new ParserExpression("RMNAME", $4, $5, true); }
+//|	',' '*' TERM OP1		{ $$ = $4; }
+//|	NUM                     { $$ = new value($1); }
+//;
 
 TERM:   NUM                             { $$ = new value($1); }
 |       ID                              { $$ = new value($1); }
