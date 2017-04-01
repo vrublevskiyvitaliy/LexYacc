@@ -58,13 +58,7 @@
             } else {
                 name = "";
                 expr = e;
-                //name = e->name;
                 id = global_id++;
-                //start = e->start;
-                //finish = e->finish;
-                //args = e->args;
-                //main = e->main;
-                //expr = new ParserExpression(e->expr);
                 op = NULL;
             }
         }
@@ -84,22 +78,21 @@
         }
         
         int save_to_file_helper(ofstream &file) {
-            string expr_string = (expr != NULL) ? to_string(expr->id) : "0";
-            string op_string = (op != NULL) ? to_string(op->id) : "0";
+            string expr_string = (expr != NULL) ? to_string(expr->save_to_file_helper(file)) : "0";
+            string op_string = (op != NULL) ? to_string(op->save_to_file_helper(file)) : "0";
             string name_string = (name.length()) ? name : "NULL";
             string result = "" + to_string(id) + " " + name_string + " " + to_string((int)args) + " " +
             to_string((int)start) + " " + to_string((int)finish) + " " + to_string((int)main) +
             " " +  expr_string + " " + op_string;
             
             file << result << endl;
-            
-            if (expr != NULL) to_string(expr->save_to_file_helper(file));
-            if (op != NULL) to_string(op->save_to_file_helper(file));
 
             return id;
         }
         
         void print(int indent=0) {
+            
+//            std::cout<< std::endl <<"printing node" << id << std::endl;
             if(args) {
                 if(start) std::cout<<"(";
                 expr->print(1);
@@ -108,13 +101,22 @@
                 
                 if(op != NULL) { if(main && finish) std::cout << std::endl; op->print(); }
             } else {
-                if(name == "SEGM") { expr->print(); std::cout << name; }
-                else if (name == "LIST") {
-                    if(op != NULL) { if(main) std::cout << std::endl;
-                        op->print(); }
+                if(name == "SEGM") {
+                    std::cout << name << std::endl;
+                    op->print();
+
+                }
+                else if (name == "HIDEN") {
+                    //std::cout << std::endl;
                     if (expr) {
-                    expr->print();
+                        expr->print();
                     }
+                    if(op != NULL) {
+                        //std::cout << std::endl;
+                        op->print();
+                    }
+                    std::cout << std::endl;
+                    
                     //op->print()
                     //return;
                 }
@@ -122,10 +124,14 @@
                     std::cout << name;
                     if(name != "" && !indent) std::cout << " "; //here was " "
                     if(expr != NULL) expr->print();
+                    
+                    if(op != NULL) { if(main) /*std::cout << std::endl;*/
+                        op->print(); }
                 }
-                if(op != NULL) { if(main) std::cout << std::endl;
-                    op->print(); }
+//                if(op != NULL) { if(main) std::cout << std::endl;
+//                    op->print(); }
             }
+//            std::cout<< std::endl <<"end printing node" << id << std::endl;
         }
     };
     
@@ -139,13 +145,13 @@
             main = true;
         }
         
-        pr(ParserExpression* o) { op = o; expr = NULL; main = true; }
+        pr(ParserExpression* o) {name = "SEGM"; op = o; expr = NULL; main = true; }
     };
     
     class listPr : public ParserExpression {
         public:
         listPr(ParserExpression* list, ParserExpression* node) {
-            name = "LIST";
+            name = "HIDEN";
             expr = list;
             op = node;
             main = true;
@@ -210,13 +216,13 @@
 %token NUM ID
 
 %type<str> NUM ID SEGM
-%type<oper> OPS /*  OP1 OP2  */ TERM ARG LIST_OP OP
+%type<oper> OPS TERM ARG LIST_OP OP
 %type<expr> NAME PARENT BYTES POINTER FREQ RULES EXIT DSGROUP SSPTR COMPRTN SOURCE RMNAME
 %type<args> ARGS
 
 %%
 
-PROGRAM: OPS                            { /*$1->save_to_file(); delete $1;*/ tree = $1; }
+PROGRAM: OPS                            { tree = $1; }
 ;
 
 OPS:    SEGM LIST_OP                     { $$ = new pr($2); }
@@ -247,7 +253,7 @@ TERM:   NUM                             { $$ = new value($1); }
 |       '('ARGS')'                 	{ $$ = new ParserExpression($2, true, true, false, true); }
 ;
 
-ARGS:                                   { /*$$.clear();*/ }
+ARGS:                                   { }
 |       ARG                             { $$ = new ParserExpression($1, true, false, true); }
 |       ARG ',' ARGS                    { $$ = new ParserExpression($1, true, false, false, $3); }
 ;
@@ -262,6 +268,9 @@ int main() {
     tree->save_to_file("example.txt");
     
     read_from_file(tree, "example.txt");
+    
+    std::cout << "Printing tree" << std::endl << std::endl << std::endl;
+    
     tree->print(0);
     
     return 0; 
