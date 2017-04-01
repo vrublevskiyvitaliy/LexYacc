@@ -3,6 +3,11 @@
     #define YYSTYPE std::string
     #include "copy.tab.h"
     void yyerror(char *s);
+    
+    char m_invalidEscape[] = "Invalid escape sequence";
+    char m_newline[] = "Newline in string literal";
+    char m_invalidCharacter[] = "Invalid character";
+    
 %}
 
 %option yylineno
@@ -35,10 +40,10 @@ SEGM return SEGM;
 }
 <STR>[^\\\n"]+  yylval += yytext;
 <STR>\\n        yylval += '\n';
-<STR>\\         yyerror("Invalid escape sequence");
-<STR>\n         yyerror("Newline in string literal");
+<STR>\\         yyerror(m_invalidEscape);
+<STR>\n         yyerror(m_newline);
 [ \t\r\n]       ; // whitespace
 [-{};()<>=+*/!,] { return *yytext; }
-.               yyerror("Invalid character");
+.               yyerror(m_invalidCharacter);
 
 %%
