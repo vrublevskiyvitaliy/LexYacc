@@ -36,7 +36,22 @@ VERSION return VERSION;
 [a-zA-Z_][a-zA-Z0-9_]* { yylval = yytext;
     return ID;
 }
-<STR>[^\\\n"]+  yylval += yytext;
+<STR>[^\\\n"]+  {
+        /*
+        
+        for (int i = 73; i < yyleng; i++) {
+            yytext[i] = ' ';
+        }
+        
+        */
+        
+        /*
+            strncat(yyval, yytext, 72);
+        */
+        
+        yylval += yytext;
+}
+
 <STR>\\n        yylval += '\n';
 <STR>\\         yyerror(m_invalidEscape);
 <STR>\n         yyerror(m_newline);
