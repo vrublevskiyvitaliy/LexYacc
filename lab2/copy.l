@@ -17,19 +17,17 @@
 %x STR
 
 %%
+DBD return DBD;
 NAME return NAME;
-PARENT return PARENT;
-BYTES return BYTES;
-POINTER return POINTER;
-FREQ return FREQ;
-RULES return RULES;
-EXIT return EXIT;
-DSGROUP return DSGROUP;
-SSPTR return SSPTR;
-COMPRTN return COMPRTN;
-SOURCE return SOURCE;
+ACCESS return ACCESS;
 RMNAME return RMNAME;
-SEGM return SEGM;
+FRSPC return FRSPC;
+PSNAME return PSNAME;
+PASSWD return PASSWD;
+DATXEXIT return DATXEXIT;
+EXIT return EXIT;
+VERSION return VERSION;
+
 
 [0-9]+          {
     yylval = yytext;

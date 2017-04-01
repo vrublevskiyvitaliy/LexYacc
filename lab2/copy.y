@@ -101,7 +101,7 @@
                 
                 if(op != NULL) { if(main && finish) std::cout << std::endl; op->print(); }
             } else {
-                if(name == "SEGM") {
+                if(name == "DBD") {
                     std::cout << name << std::endl;
                     op->print();
 
@@ -139,13 +139,13 @@
     class pr : public ParserExpression {
         public:
         pr(ParserExpression* str, ParserExpression* o) {
-            name = "SEGM";
+            name = "DBD";
             expr = str;
             op = o;
             main = true;
         }
         
-        pr(ParserExpression* o) {name = "SEGM"; op = o; expr = NULL; main = true; }
+        pr(ParserExpression* o) {name = "DBD"; op = o; expr = NULL; main = true; }
     };
     
     class listPr : public ParserExpression {
@@ -212,12 +212,12 @@
 //for better debuging
 %error-verbose
 
-%token NAME PARENT BYTES POINTER FREQ RULES EXIT DSGROUP SSPTR COMPRTN SOURCE RMNAME SEGM
+%token NAME ACCESS RMNAME FRSPC PASSWD DATXEXIT EXIT VERSION DBD PSNAME
 %token NUM ID
 
-%type<str> NUM ID SEGM
+%type<str> NUM ID DBD
 %type<oper> OPS TERM ARG LIST_OP OP
-%type<expr> NAME PARENT BYTES POINTER FREQ RULES EXIT DSGROUP SSPTR COMPRTN SOURCE RMNAME
+%type<expr> NAME ACCESS RMNAME FRSPC PASSWD DATXEXIT EXIT VERSION
 %type<args> ARGS
 
 %%
@@ -225,8 +225,7 @@
 PROGRAM: OPS                            { tree = $1; }
 ;
 
-OPS:    SEGM LIST_OP                     { $$ = new pr($2); }
-|       TERM SEGM LIST_OP                { $$ = new pr($1, $3); }
+OPS:    DBD LIST_OP                     { $$ = new pr($2); }
 ;
 
 
@@ -235,17 +234,16 @@ LIST_OP','OP { $$ = new listPr($1, $3); }
 | OP { $$ = new listPr(NULL, $1); }
 ;
 
-OP:
-NAME'='TERM			{ $$ = new ParserExpression("NAME", NULL, $3, true); }
-|	PARENT'='TERM		{ $$ = new ParserExpression("PARENT", $3, NULL, true); }
-|	BYTES'='TERM		{ $$ = new ParserExpression("BYTES", $3, NULL, true); }
-|	POINTER'='TERM		{ $$ = new ParserExpression("POINTER", $3, NULL, true); }
-|	FREQ'='TERM		        { $$ = new ParserExpression("FREQ", $3, NULL, true); }
-|	EXIT'='TERM			{ $$ = new ParserExpression("EXIT", $3, NULL, true); }
-|	DSGROUP'='TERM		{ $$ = new ParserExpression("DSGROUP", $3, NULL, true); }
-|	SSPTR'='TERM		{ $$ = new ParserExpression("SSPTR", $3, NULL, true); }
-|	COMPRTN'='TERM		{ $$ = new ParserExpression("COMPRTN", $3, NULL, true); }
+
+OP: NAME'='TERM			{ $$ = new ParserExpression("NAME", NULL, $3, true); }
+|	ACCESS'='TERM		{ $$ = new ParserExpression("ACCESS", $3, NULL, true); }
 |	RMNAME'='TERM		{ $$ = new ParserExpression("RMNAME", $3, NULL, true); }
+|	FRSPC'='TERM		{ $$ = new ParserExpression("FRSPC", $3, NULL, true); }
+|	PSNAME'='TERM		{ $$ = new ParserExpression("PSNAME", $3, NULL, true); }
+|	PASSWD'='TERM		        { $$ = new ParserExpression("PASSWD", $3, NULL, true); }
+|	DATXEXIT'='TERM			{ $$ = new ParserExpression("DATXEXIT", $3, NULL, true); }
+|	EXIT'='TERM		{ $$ = new ParserExpression("EXIT", $3, NULL, true); }
+|	VERSION'='TERM		{ $$ = new ParserExpression("VERSION", $3, NULL, true); }
 ;
 
 TERM:   NUM                             { $$ = new value($1); }
