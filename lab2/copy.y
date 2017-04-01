@@ -6,7 +6,7 @@
     #include <cstdlib>
     using namespace std;
 
-int global_id = 1;
+    int global_id = 1;
     const int hash_size = 100;
     extern int yylineno;
     extern int yylex();
@@ -56,14 +56,16 @@ int global_id = 1;
                 op = NULL;
                 id = global_id++;
             } else {
-                name = e->name;
+                name = "";
+                expr = e;
+                //name = e->name;
                 id = global_id++;
-                start = e->start;
-                finish = e->finish;
-                args = e->args;
-                main = e->main;
-                expr = new ParserExpression(e->expr);
-                op = new ParserExpression(e->op);
+                //start = e->start;
+                //finish = e->finish;
+                //args = e->args;
+                //main = e->main;
+                //expr = new ParserExpression(e->expr);
+                op = NULL;
             }
         }
         
@@ -82,14 +84,18 @@ int global_id = 1;
         }
         
         int save_to_file_helper(ofstream &file) {
-            string expr_string = (expr != NULL) ? to_string(expr->save_to_file_helper(file)) : "0";
-            string op_string = (op != NULL) ? to_string(op->save_to_file_helper(file)) : "0";
+            string expr_string = (expr != NULL) ? to_string(expr->id) : "0";
+            string op_string = (op != NULL) ? to_string(op->id) : "0";
             string name_string = (name.length()) ? name : "NULL";
             string result = "" + to_string(id) + " " + name_string + " " + to_string((int)args) + " " +
             to_string((int)start) + " " + to_string((int)finish) + " " + to_string((int)main) +
             " " +  expr_string + " " + op_string;
             
             file << result << endl;
+            
+            if (expr != NULL) to_string(expr->save_to_file_helper(file));
+            if (op != NULL) to_string(op->save_to_file_helper(file));
+
             return id;
         }
         
@@ -103,6 +109,15 @@ int global_id = 1;
                 if(op != NULL) { if(main && finish) std::cout << std::endl; op->print(); }
             } else {
                 if(name == "SEGM") { expr->print(); std::cout << name; }
+                else if (name == "LIST") {
+                    if(op != NULL) { if(main) std::cout << std::endl;
+                        op->print(); }
+                    if (expr) {
+                    expr->print();
+                    }
+                    //op->print()
+                    //return;
+                }
                 else {
                     std::cout << name;
                     if(name != "" && !indent) std::cout << " "; //here was " "
@@ -125,6 +140,17 @@ int global_id = 1;
         }
         
         pr(ParserExpression* o) { op = o; expr = NULL; main = true; }
+    };
+    
+    class listPr : public ParserExpression {
+        public:
+        listPr(ParserExpression* list, ParserExpression* node) {
+            name = "LIST";
+            expr = list;
+            op = node;
+            main = true;
+        }
+        
     };
     
     
@@ -199,12 +225,12 @@ OPS:    SEGM LIST_OP                     { $$ = new pr($2); }
 
 
 LIST_OP:
-LIST_OP','OP { $$ = new pr($1, $3); }
-| OP { $$ = new pr($1); }
+LIST_OP','OP { $$ = new listPr($1, $3); }
+| OP { $$ = new listPr(NULL, $1); }
 ;
 
 OP:
-NAME'='TERM			{ $$ = new ParserExpression("NAME", $3, NULL, true); }
+NAME'='TERM			{ $$ = new ParserExpression("NAME", NULL, $3, true); }
 |	PARENT'='TERM		{ $$ = new ParserExpression("PARENT", $3, NULL, true); }
 |	BYTES'='TERM		{ $$ = new ParserExpression("BYTES", $3, NULL, true); }
 |	POINTER'='TERM		{ $$ = new ParserExpression("POINTER", $3, NULL, true); }
@@ -214,39 +240,7 @@ NAME'='TERM			{ $$ = new ParserExpression("NAME", $3, NULL, true); }
 |	SSPTR'='TERM		{ $$ = new ParserExpression("SSPTR", $3, NULL, true); }
 |	COMPRTN'='TERM		{ $$ = new ParserExpression("COMPRTN", $3, NULL, true); }
 |	RMNAME'='TERM		{ $$ = new ParserExpression("RMNAME", $3, NULL, true); }
-// for testing
-//|	NUM                     { $$ = new value($1); }
 ;
-//
-//OP1:
-//NAME'='TERM OP2			{ $$ = new ParserExpression("NAME", $3, $4, true); }
-//|	PARENT'='TERM OP2		{ $$ = new ParserExpression("PARENT", $3, $4, true); }
-//|	BYTES'='TERM OP2		{ $$ = new ParserExpression("BYTES", $3, $4, true); }
-//|	POINTER'='TERM OP2		{ $$ = new ParserExpression("POINTER", $3, $4, true); }
-//|	FREQ'='TERM OP2		        { $$ = new ParserExpression("FREQ", $3, $4, true); }
-//|	EXIT'='TERM OP2			{ $$ = new ParserExpression("EXIT", $3, $4, true); }
-//|	DSGROUP'='TERM OP2		{ $$ = new ParserExpression("DSGROUP", $3, $4, true); }
-//|	SSPTR'='TERM OP2		{ $$ = new ParserExpression("SSPTR", $3, $4, true); }
-//|	COMPRTN'='TERM OP2		{ $$ = new ParserExpression("COMPRTN", $3, $4, true); }
-//|	RMNAME'='TERM OP2		{ $$ = new ParserExpression("RMNAME", $3, $4, true); }
-//// for testing
-//|	NUM                     { $$ = new value($1); }
-//;
-//
-//OP2:
-//','NAME'='TERM OP2		{ $$ = new ParserExpression("NAME", $4, $5, true); }
-//|	','PARENT'='TERM OP2		{ $$ = new ParserExpression("PARENT", $4, $5, true); }
-//|	','BYTES'='TERM OP2		{ $$ = new ParserExpression("BYTES", $4, $5, true); }
-//|	','POINTER'='TERM OP2		{ $$ = new ParserExpression("POINTER", $4, $5, true); }
-//|	','FREQ'='TERM OP2		{ $$ = new ParserExpression("FREQ", $4, $5, true); }
-//|	','EXIT'='TERM OP2		{ $$ = new ParserExpression("EXIT", $4, $5, true); }
-//|	','DSGROUP'='TERM OP2		{ $$ = new ParserExpression("DSGROUP", $4, $5, true); }
-//|	','SSPTR'='TERM OP2		{ $$ = new ParserExpression("SSPTR", $4, $5, true); }
-//|	','COMPRTN'='TERM OP2		{ $$ = new ParserExpression("COMPRTN", $4, $5, true); }
-//|	','RMNAME'='TERM OP2		{ $$ = new ParserExpression("RMNAME", $4, $5, true); }
-//|	',' '*' TERM OP1		{ $$ = $4; }
-//|	NUM                     { $$ = new value($1); }
-//;
 
 TERM:   NUM                             { $$ = new value($1); }
 |       ID                              { $$ = new value($1); }
