@@ -12,7 +12,6 @@
     int offset = 0;
     int startOfPunchedCard = 79;
     
-    
 %}
 
 %option yylineno
@@ -22,6 +21,7 @@
 %x STR
 
 %%
+
 DBD {
     offset += yyleng;
     if (offset > startOfPunchedCard) {
@@ -43,14 +43,58 @@ ACCESS {
     }
     return ACCESS;
 }
-RMNAME return RMNAME;
-FRSPC return FRSPC;
-PSNAME return PSNAME;
-PASSWD return PASSWD;
-DATXEXIT return DATXEXIT;
-EXIT return EXIT;
-VERSION return VERSION;
-PUNCHEDCARD return PUNCHEDCARD;
+RMNAME {
+    offset += yyleng;
+    if (offset > startOfPunchedCard) {
+        BEGIN STR;
+    }
+    return RMNAME;
+}
+FRSPC {
+    offset += yyleng;
+    if (offset > startOfPunchedCard) {
+        BEGIN STR;
+    }
+    return FRSPC;
+}
+PSNAME {
+    offset += yyleng;
+    if (offset > startOfPunchedCard) {
+        BEGIN STR;
+    }
+  return PSNAME;
+}
+PASSWD {
+    offset += yyleng;
+    if (offset > startOfPunchedCard) {
+        BEGIN STR;
+    }
+    return PASSWD;
+}
+DATXEXIT {
+    offset += yyleng;
+    if (offset > startOfPunchedCard) {
+        BEGIN STR;
+    }
+    return DATXEXIT;
+}
+EXIT {
+    offset += yyleng;
+    if (offset > startOfPunchedCard) {
+        BEGIN STR;
+    }
+    return EXIT;
+}
+VERSION {
+    offset += yyleng;
+    if (offset > startOfPunchedCard) {
+        BEGIN STR;
+    }
+    return VERSION;
+}
+PUNCHEDCARD {
+    return PUNCHEDCARD;
+}
 
 
 [0-9]+          {
