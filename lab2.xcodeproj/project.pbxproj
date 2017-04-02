@@ -12,6 +12,7 @@
 		F1631D191E8EF39800068607 /* copy.y in Sources */ = {isa = PBXBuildFile; fileRef = F1631D121E8EF39800068607 /* copy.y */; };
 		F1631D1E1E8EF60B00068607 /* copy.tab.c in Sources */ = {isa = PBXBuildFile; fileRef = F1631D1B1E8EF60B00068607 /* copy.tab.c */; };
 		F1631D1F1E8EF60B00068607 /* lex.yy.c in Sources */ = {isa = PBXBuildFile; fileRef = F1631D1D1E8EF60B00068607 /* lex.yy.c */; };
+		F1631D211E9137CA00068607 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = F1631D201E9137CA00068607 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -38,6 +39,7 @@
 		F1631D1B1E8EF60B00068607 /* copy.tab.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = copy.tab.c; sourceTree = "<group>"; };
 		F1631D1C1E8EF60B00068607 /* copy.tab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = copy.tab.h; sourceTree = "<group>"; };
 		F1631D1D1E8EF60B00068607 /* lex.yy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lex.yy.c; sourceTree = "<group>"; };
+		F1631D201E9137CA00068607 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +82,7 @@
 				F1631D141E8EF39800068607 /* example.txt */,
 				F1631D161E8EF39800068607 /* test.file */,
 				F1631D071E8EF37E00068607 /* main.cpp */,
+				F1631D201E9137CA00068607 /* README.md */,
 			);
 			path = lab2;
 			sourceTree = "<group>";
@@ -141,6 +144,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1631D211E9137CA00068607 /* README.md in Sources */,
 				F1631D191E8EF39800068607 /* copy.y in Sources */,
 				F1631D081E8EF37E00068607 /* main.cpp in Sources */,
 				F1631D171E8EF39800068607 /* copy.l in Sources */,
@@ -272,6 +276,7 @@
 				F1631D0D1E8EF37E00068607 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
